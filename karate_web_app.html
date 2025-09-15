@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🥋 Karate Kid Coin Toss 🥋</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One:wght@400&family=Comic+Neue:wght@400;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #2c3e50, #34495e, #2c3e50);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+            font-family: 'Comic Neue', cursive;
+            min-height: 100vh;
+            color: white;
+            padding: 20px;
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 2.5rem;
+            color: #f39c12;
+            text-shadow: 3px 3px 0px #333;
+            margin-bottom: 20px;
+            animation: titlePulse 2s infinite;
+        }
+        
+        @keyframes titlePulse {
+            0%, 100% { color: #f39c12; }
+            25% { color: #e74c3c; }
+            50% { color: #3498db; }
+            75% { color: #2ecc71; }
+        }
+        
+        .karate-ascii {
+            background: #34495e;
+            border: 3px solid #f39c12;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            color: #3498db;
+            white-space: pre-line;
+            font-size: 14px;
+            line-height: 1.2;
+            animation: karateGlow 3s infinite;
+        }
+        
+        @keyframes karateGlow {
+            0%, 100% { box-shadow: 0 0 10px rgba(243, 156, 18, 0.3); }
+            50% { box-shadow: 0 0 20px rgba(243, 156, 18, 0.6); }
+        }
+        
+        .speech-bubble {
+            background: #ecf0f1;
+            color: #2c3e50;
+            padding: 15px 20px;
+            border-radius: 25px;
+            border: 3px solid #e74c3c;
+            margin: 20px 0;
+            font-size: 1.2rem;
+            font-weight: bold;
+            position: relative;
+            display: inline-block;
+            animation: bubbleBounce 0.5s ease-out;
+        }
+        
+        @keyframes bubbleBounce {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .speech-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 15px solid #ecf0f1;
+        }
+        
+        .button-container {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        
+        .choice-btn {
+            padding: 20px 40px;
+            font-size: 1.5rem;
+            font-family: 'Fredoka One', cursive;
+            border: 4px solid #333;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 0 #333;
+            color: white;
+            text-shadow: 2px 2px 0px #333;
+            min-width: 160px;
+        }
+        
+        .choice-btn.bugbog {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+        }
+        
+        .choice-btn.dignidad {
+            background: linear-gradient(45deg, #9b59b6, #8e44ad);
+        }
+        
+        .choice-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 13px 0 #333;
+        }
+        
+        .choice-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 5px 0 #333;
+        }
+        
+        .choice-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .result {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin: 30px 0;
+            padding: 20px;
+            border-radius: 15px;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            line-height: 1.4;
+            animation: resultAppear 0.5s ease-out;
+        }
+        
+        @keyframes resultAppear {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        
+        .result.victory {
+            background: linear-gradient(45deg, #2ecc71, #27ae60);
+            border: 3px solid #1e8449;
+        }
+        
+        .result.defeat {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            border: 3px solid #922b21;
+        }
+        
+        .stats {
+            background: #34495e;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #95a5a6;
+            margin-top: 20px;
+            font-size: 1.1rem;
+        }
+        
+        .stats-item {
+            display: inline-block;
+            margin: 0 15px;
+            color: #ecf0f1;
+        }
+        
+        .karate-moves {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 2rem;
+            opacity: 0;
+            animation: movesFloat 0.5s ease-out;
+        }
+        
+        @keyframes movesFloat {
+            0% { opacity: 0; transform: translateY(20px); }
+            50% { opacity: 1; transform: translateY(-10px); }
+            100% { opacity: 0; transform: translateY(-30px); }
+        }
+        
+        .loading {
+            color: #f39c12;
+            font-size: 1.2rem;
+            animation: loadingPulse 1s infinite;
+        }
+        
+        @keyframes loadingPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2rem;
+            }
+            
+            .button-container {
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+            }
+            
+            .choice-btn {
+                width: 200px;
+            }
+            
+            .karate-ascii {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">🥋 KARATE KID COIN TOSS 🥋</h1>
+        
+        <div class="karate-ascii" id="karateAscii">⭐ SENSEI SAYS: ⭐
+           ╭─────╮
+          │  ◉ ◉  │
+          │   ∪   │
+           ╰─────╯
+             │█│
+          ╭──█─█──╮
+         │   █   │
+          ╰──███──╯
+             █ █
+            █   █
+          🥋     🥋</div>
+        
+        <div class="speech-bubble" id="speechBubble">
+            Choose your destiny, young grasshopper! 🌱
+        </div>
+        
+        <div class="button-container">
+            <button class="choice-btn bugbog" id="bugbogBtn" onclick="makeChoice('bugbog')">
+                🐛 BUGBOG
+            </button>
+            <button class="choice-btn dignidad" id="dignidadBtn" onclick="makeChoice('dignidad')">
+                👑 DIGNIDAD
+            </button>
+        </div>
+        
+        <div class="result" id="result" style="display: none;"></div>
+        
+        <div class="stats">
+            <div class="stats-item">🏆 Wins: <span id="wins">0</span></div>
+            <div class="stats-item">🎮 Games: <span id="games">0</span></div>
+            <div class="stats-item">📊 Win Rate: <span id="winRate">0%</span></div>
+        </div>
+    </div>
+    
+    <div class="karate-moves" id="karateMoves"></div>
+
+    <script>
+        // Game state (replaces Python variables)
+        let wins = 0;
+        let totalGames = 0;
+        
+        // Your original Python logic: choice(["bugbog", "dignidad"])
+        function randomChoice() {
+            const choices = ["bugbog", "dignidad"];
+            return choices[Math.floor(Math.random() * choices.length)];
+        }
+        
+        function makeChoice(userChoice) {
+            // Disable buttons during game
+            document.getElementById('bugbogBtn').disabled = true;
+            document.getElementById('dignidadBtn').disabled = true;
+            
+            // Show karate action
+            showKarateAction();
+            
+            // Update speech bubble
+            const speechBubble = document.getElementById('speechBubble');
+            speechBubble.textContent = "HI-YA! 🥋 *KARATE CHOP*";
+            speechBubble.style.background = '#f39c12';
+            speechBubble.style.color = 'white';
+            
+            // Show loading
+            const result = document.getElementById('result');
+            result.style.display = 'block';
+            result.className = 'result loading';
+            result.textContent = 'Sensei is making his choice...';
+            
+            // Simulate the Python random choice after delay
+            setTimeout(() => {
+                // This is your original Python code: bata = choice(["bugbog", "dignidad"])
+                const computerChoice = randomChoice();
+                
+                // Update game stats
+                totalGames++;
+                
+                // Determine result
+                let resultText, resultClass;
+                
+                if (userChoice === computerChoice) {
+                    wins++;
+                    resultText = `🎉 VICTORY! 🎉\nYou both chose ${userChoice.toUpperCase()}!\nYou have mastered the way of the coin!`;
+                    resultClass = 'result victory';
+                } else {
+                    resultText = `💪 TRAIN HARDER! 💪\nYou chose ${userChoice.toUpperCase()}\nSensei chose ${computerChoice.toUpperCase()}\nThe path to mastery continues...`;
+                    resultClass = 'result defeat';
+                }
+                
+                // Show result
+                result.textContent = resultText;
+                result.className = resultClass;
+                
+                // Update stats
+                updateStats();
+                
+                // Reset for next game
+                setTimeout(() => {
+                    speechBubble.textContent = "Ready for another round? 🥋";
+                    speechBubble.style.background = '#ecf0f1';
+                    speechBubble.style.color = '#2c3e50';
+                    
+                    document.getElementById('bugbogBtn').disabled = false;
+                    document.getElementById('dignidadBtn').disabled = false;
+                }, 3000);
+                
+            }, 2000);
+        }
+        
+        function showKarateAction() {
+            const karateMoves = document.getElementById('karateMoves');
+            const moves = ['🥋', '👊', '🦵', '✋', '👋'];
+            const randomMove = moves[Math.floor(Math.random() * moves.length)];
+            
+            karateMoves.textContent = randomMove;
+            karateMoves.style.animation = 'none';
+            karateMoves.offsetHeight; // Trigger reflow
+            karateMoves.style.animation = 'movesFloat 0.5s ease-out';
+            
+            // Animate the ASCII karate kid
+            animateKarateKid();
+        }
+        
+        function animateKarateKid() {
+            const ascii = document.getElementById('karateAscii');
+            const colors = ['#3498db', '#e74c3c', '#f39c12', '#2ecc71', '#9b59b6'];
+            let colorIndex = 0;
+            
+            const colorInterval = setInterval(() => {
+                ascii.style.color = colors[colorIndex];
+                colorIndex++;
+                
+                if (colorIndex >= colors.length) {
+                    clearInterval(colorInterval);
+                    ascii.style.color = '#3498db'; // Reset to original
+                }
+            }, 200);
+        }
+        
+        function updateStats() {
+            document.getElementById('wins').textContent = wins;
+            document.getElementById('games').textContent = totalGames;
+            
+            const winRate = totalGames > 0 ? Math.round((wins / totalGames) * 100) : 0;
+            document.getElementById('winRate').textContent = winRate + '%';
+        }
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🥋 Karate Kid Coin Toss Web App Loaded!');
+            console.log('Original Python logic: bata = choice(["bugbog", "dignidad"])');
+            updateStats();
+        });
+        
+        // Add some periodic karate wisdom
+        const wisdom = [
+            "The way of the coin is mysterious... 🪙",
+            "Balance, young grasshopper! ⚖️",
+            "Victory comes to those who train! 💪",
+            "The coin has no master... 🧘",
+            "Patience leads to wisdom! 🌸"
+        ];
+        
+        setInterval(() => {
+            if (!document.getElementById('bugbogBtn').disabled) {
+                const speechBubble = document.getElementById('speechBubble');
+                const randomWisdom = wisdom[Math.floor(Math.random() * wisdom.length)];
+                
+                const originalText = speechBubble.textContent;
+                speechBubble.textContent = randomWisdom;
+                
+                setTimeout(() => {
+                    if (speechBubble.textContent === randomWisdom) {
+                        speechBubble.textContent = "Ready for another round? 🥋";
+                    }
+                }, 3000);
+            }
+        }, 8000);
+    </script>
+</body>
+</html>
